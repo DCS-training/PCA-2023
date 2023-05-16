@@ -1,9 +1,8 @@
-library(tidyverse)
 library(rlang)
-
-install.packages("rlang")
-install.packages("ggcorrplot")
 library(ggcorrplot)
+library (factoextra)
+library(ggfortify)
+
 DataSet <- read_csv("data/simd2020_withinds_toTest.csv")
 
 #Let's Look at it
@@ -13,11 +12,11 @@ DataSet <- read_csv("data/simd2020_withinds_toTest.csv")
 SubsetDataSet<-DataSet[,c(3,4,18,20,29,32,33,38,39,43,49)]
 
 #Step 1 Remove % and * and re-encode as Continuous values +factors
-SubsetDataSetCleaned <- mutate_if(SubsetDatabase, 
-                             is.character, 
-                             str_replace_all, 
-                             pattern = "[%*]", 
-                             replacement = "")
+SubsetDataSetCleaned <- mutate_if(SubsetDataSet, 
+                                  is.character, 
+                                  str_replace_all, 
+                                  pattern = "[%*]", 
+                                  replacement = "")
 
 SubsetDataSetCleaned <- na_if(SubsetDataSetCleaned, '')
 
@@ -37,7 +36,7 @@ DatasetNoNull <-na.omit(SubsetDataSetCleaned)
 #Check again
 colSums(is.na(DatasetNoNull))
 
-library(tidyverse)
+
 #Group by constituency
 Costituencies <- DatasetNoNull%>% 
   group_by(Council_area)%>% 
@@ -76,9 +75,7 @@ summary(data_pca)
 
 data_pca$loadings[, 1:2]
 
-install.packages("factoextra")
-install.packages("cli")
-library(factoextra)
+
 #factoextra
 fviz_eig(data_pca, addlabels = TRUE)
 
@@ -112,15 +109,15 @@ pcs$x[,2]
 #Finally let's plot it 
 ggplot(pcDataset, aes(x=V1, y=V2, color=Council_area, label=Council_area)) + geom_point(size=8, alpha=0.5)+theme_bw()+ labs(title = "Council")+geom_text(size=3)+ theme(legend.position = "none")  
 
-ggplot(pcIris, aes(x=Sepal.Length, y=Sepal.Width, color=Species)) + geom_point(size=6, alpha=0.5)+theme_bw()+ labs(title = "Iris") 
+
 
 #Better see the clusters
-library(plyr)
 
-find_hull <- function(pcDataset) pcDataset[chull(pcDataset$V1, pcDataset$V2), ]
-hulls <- ddply(pcDataset,"Council_area", find_hull)
 
-ggplot(pcDataset, aes(x=V1, y=V2, color=Council_area)) + geom_point(size=6, alpha=0.5)+theme_bw()+ labs(title = "Try")+ geom_polygon(data=hulls, alpha=.2, aes(fill=Council_area))
+#find_hull <- function(pcDataset) pcDataset[chull(pcDataset$V1, pcDataset$V2), ]
+#hulls <- ddply(pcDataset,"Council_area", find_hull)
+
+#ggplot(pcDataset, aes(x=V1, y=V2, color=Council_area)) + geom_point(size=6, alpha=0.5)+theme_bw()+ labs(title = "Try")+ geom_polygon(data=hulls, alpha=.2, aes(fill=Council_area))
 
 #Plot the variance percentage impact of PC1 and PC2
 pcDataset <- subset(pcDataset, select=c(V1:Council_area))
@@ -130,7 +127,5 @@ percentage <- paste( colnames(pcDataset), "(",paste(as.character(percentage), "%
 ggplot(pcDataset, aes(x=V1, y=V2, color=Council_area)) + geom_point(size=6, alpha=0.5)+theme_bw()+ labs(title = "Iris")+ xlab(percentage[1]) + ylab(percentage[2])
 
 #other option
-install.packages("ggfortify")
-library(ggfortify)
-autoplot(pcs, data=iris, size=4, alpha=0.5, colour='Species', loadings=TRUE,loadings.label = TRUE )+theme_bw()
 
+autoplot(pcs, data=Costituencies, size=4, alpha=0.5, colour='Council_area', loadings=TRUE,loadings.label = TRUE )+theme_bw()
