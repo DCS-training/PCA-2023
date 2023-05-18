@@ -1,4 +1,4 @@
-# PCA-
+# PCA with R
 
 Welcome to the read me file for the PCA workshop. 
 In this repo you are going to find the code and files we are going to use for the practical part of the workshop, together with the ppt associsated with this training.
