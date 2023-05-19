@@ -2,7 +2,6 @@
 library(tidyverse)
 library(ggcorrplot)
 library(factoextra)
-library(ggfortify)
 library(plyr)
 
 # Data set 1:SIMD Data ######
@@ -48,15 +47,15 @@ SIMDNoNull$University <-(100-SIMDNoNull$University)
 #Since we want to look at by authority/constituency lets
 #Group by constituency
 Costituencies <- SIMDNoNull%>% 
-  group_by(Council_area)%>% 
-  summarise(income_rate=mean(income_rate),
+  dplyr::group_by(Council_area)%>% 
+  dplyr::summarise(income_rate=mean(income_rate),
             employment_rate=mean(employment_rate),
             Attendance=mean(Attendance),
             not_participating=mean(not_participating),
             University=mean(University),
             overcrowded_rate=mean(overcrowded_rate),
             nocentralheating_rate=mean(nocentralheating_rate),
-            broadband=mean(broadband),)
+            broadband=mean(broadband))
 
 
 #Subset only continuous variables
