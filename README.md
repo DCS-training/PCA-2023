@@ -6,7 +6,7 @@ In order to follow along you will have to pull this repository into Noteable.
 
 Below are the steps to do so and get set. 
 
-## On Noteble
+## On Noteable
 
 1. Go to https://noteable.edina.ac.uk/login
 2. Login with your EASE credentials
